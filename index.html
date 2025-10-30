@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Interattiva dell'Ucraina</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  >
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script>
+    const map = L.map('map').setView([48.3794, 31.1656], 6);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      subdomains: ['a', 'b', 'c', 'd'],
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+
+    const cities = [
+      { name: 'Mariupol', coords: [47.0971, 37.5434] },
+      { name: 'Bucha', coords: [50.5410, 30.2134] },
+      { name: 'Kharkiv', coords: [49.9935, 36.2304] },
+      { name: 'Kramatorsk', coords: [48.7230, 37.5560] },
+      { name: 'Lviv', coords: [49.8397, 24.0297] }
+    ];
+
+    const rawLocations = [
+      { person: 'Іван Плотник', location: 'Novyi Bykiv, regione di Chernihiv', coords: [50.5958210, 31.6701510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76ir6i9nst1drr1u621jucr9h1cc.png' },
+      { person: 'Ольга Клепак', location: 'Staryi Bykiv, regione di Chernihiv', coords: [50.5899810, 31.6392500], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76ikdrucjf14d51kar1t6jq5j1ad.png' },
+      { person: 'Ольга Клепак', location: 'Novyi Bykiv, regione di Chernihiv', coords: [50.5958210, 31.6701510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76ikdrucjf14d51kar1t6jq5j1ad.png' },
+      { person: 'Антон Фенган', location: 'Voronky, regione di Chernihiv', coords: [50.6835430, 31.5873538], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76iegv91tdf2v0jq19qinir17k.png' },
+      { person: 'Микола Кучерина', location: 'Nova Basan, regione di Chernihiv', coords: [50.5728110, 31.5184000], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76i8a6odlp1tlpmqjqa514qt15l.png' },
+      { person: 'Володимир Неменущий', location: 'Chasiv Yar, regione di Donetsk', coords: [48.5873911, 37.8373367], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76i0aso1qu51nn211261aeh48i13h.png' },
+      { person: 'Ірина Малишева', location: 'Luch, regione di Mykolaiv', coords: [46.8279549, 32.2220079], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76hr05rjtgo0i2omd7o1l7e11i.png' },
+      { person: 'Вячеслав Бережний', location: 'Rivnopillia, regione di Zaporizhzhia', coords: [47.7410890, 36.3156510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76hje5719531hdscqk1glm1id9uk.png' },
+      { person: 'Руслан Грибачов', location: 'Rivnopillia, regione di Zaporizhzhia', coords: [47.7410890, 36.3156510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76hce7j13qrk3g59i12av1rphsb.png' },
+      { person: 'Сергій Курман', location: 'Rivnopillia, regione di Zaporizhzhia', coords: [47.7410890, 36.3156510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76h76pj1i5841o1949b0p4beq7.png' },
+      { person: 'Іван Лисенко', location: 'Rivnopillia, regione di Zaporizhzhia', coords: [47.7410890, 36.3156510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76h1q3a1cjd1q26bf61utbmuln4.png' },
+      { person: 'Ганна Літвіненко', location: 'via Kharkivska, Rohan', coords: [49.9054473, 36.4984772], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76grroenhn1ib9hi8hlsn5ckr.png' },
+      { person: 'Іван Шеремет', location: 'Snihurivka, regione di Mykolaiv', coords: [47.0707210, 32.7924643], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76gl65edp57361sbhg1lfeki2.png' },
+      { person: 'Ірина Шевченко', location: 'Uman, regione di Cherkasy', coords: [48.7497621, 30.2203052], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76gfucbdosad51hud1qojk79fu.png' },
+      { person: 'Тетяна Лєбєдєва', location: 'Bilopillia, regione di Sumy', coords: [51.1460449, 34.3121992], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76gb4jd1flq10la86lego1en3dl.png' },
+      { person: 'Ігор Тоценко', location: 'Chasiv Yar, regione di Donetsk', coords: [48.5873911, 37.8373367], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76g3qknegj1luc1anm6d4o68bc.png' },
+      { person: 'Людмила Приходько', location: 'Bilopillia, regione di Sumy', coords: [51.1460449, 34.3121992], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76fvsuu1rn616ng11ga9ru11in9d.png' },
+      { person: 'Ніна Дедушко', location: 'Bilopillia, regione di Sumy', coords: [51.1460449, 34.3121992], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76fr3pdirmqu5p36ert16lr79.png' },
+      { person: 'Сергій Полюшкін', location: 'Mariupol, distretto Lievoberezhnyi', coords: [47.1079009, 37.6271256], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76fll5v1eco182u1iqo1v6hank5a.png' },
+      { person: 'Олена Полюшкіна', location: 'Mariupol, regione di Donetsk', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76ffa6irqil6t571mpjfeb31.png' },
+      { person: 'Лариса Глубока', location: 'Lyman, regione di Donetsk', coords: [48.9801314, 37.8168012], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76f99gm1s5aen279e1bj19qjo.png' },
+
+      { person: 'Ніна Тевкун', location: 'Левковичі, Чернігівська область', coords: [51.4941076, 31.0867572], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7ep36dqs051ttg1vl1f9bpaodo.png' },
+      { person: 'Віталій Сотник', location: 'Левковичі, Чернігівська область', coords: [51.4941076, 31.0867572], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7eotvvpqsmlgddf21ama1g8taq.png' },
+      { person: 'Юрій Скачок', location: 'Покровськ, Донецька область', coords: [48.2771086, 37.1772482], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7eon48k15el13knvr11hf7ag391.png' },
+      { person: 'Крістіна Спіцина', location: 'Запоріжжя', coords: [47.8507859, 35.1182867], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7eoi2jt1rd11f6q4f71a6cin578.png' },
+      { person: 'Лариса Львова', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7e46n2pqth1v7s1soiv9p1tv39t.png' },
+      { person: 'Ростислава Петренко', location: 'Покровськ, Донецька область', coords: [48.2771086, 37.1772482], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7e3v1hd6ah1da7ijk1p6d1c8u7p.png' },
+      { person: 'Артем Степаненко', location: 'Покровськ, Донецька область', coords: [48.2771086, 37.1772482], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7e3papjfp216561lbp9b4ltm5l.png' },
+      { person: 'Любов Харлан', location: 'Солончаки, Миколаївська область', coords: [46.6443470, 31.8180759], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7e3hjn31rtu1g7j1mq01hfp184j3h.png' },
+      { person: 'Людмила Семерня', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76rvh699g01te0vd5uk71asd3hs.png' },
+      { person: 'Катерина Жовтнева', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76rp1gp1li14p0fk61ore2f3ft.png' },
+      { person: 'Владислав Титаренко', location: 'Куп\'янськ, Харківська область', coords: [49.7132963, 37.6141992], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76rj9l514id1mim1abek5nmqe3dp.png' },
+      { person: 'Віктор Харлан', location: 'Солончаки, Миколаївська область', coords: [46.6443470, 31.8180759], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76rcj7ldd22811rjjc5kmjm3bb.png' },
+      { person: 'Валентина Шевченко', location: 'Подоли, Куп\'янський район, Харківська область', coords: [49.6925770, 37.6672780], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76r4nl21431jdudro1ua9cim38d.png' },
+      { person: 'Валерій Ткачов', location: 'Гуляйполе, Запорізька область', coords: [47.6655382, 36.2656849], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76qvjbv1s1d12uc1c2a6tl1re8369.png' },
+      { person: 'Олександр Кравець', location: 'Ворзель, Київська область', coords: [50.5457287, 30.1562891], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76qf2pshtq1dub1f0h1oqp1fpl303.png' },
+      { person: 'Віталій Терентієв', location: 'Басань, Запорізька область', coords: [47.3770710, 36.1815380], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76q7mtp4cc1con1v2s11tb3g22t5.png' },
+      { person: 'Максим Магиря', location: 'Кривий Ріг, Дніпропетровська область', coords: [47.9102734, 33.3917703], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76pup9h99pb47td46g56jv2pn.png' },
+      { person: 'Євген Чередніченко', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76pms0i197c1b347ue1ktv52m2mp.png' },
+      { person: 'Тарас Жила', location: 'Антонівка, Херсонська область', coords: [46.6799270, 32.7368083], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76pfoiv1rkst7v1cs1fbajnh2kg.png' },
+      { person: 'Лідія Сова', location: 'Успенівка, Запорізька область', coords: [47.7767910, 36.4203610], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76p8funu051jue1t8fmot178v2ic.png' },
+      { person: 'Ірина Подрезенко', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76lhdr36jd1fdk1kc611ji1qn12g8.png' },
+      { person: 'Галина Шандро', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76l6enh1luc13pgbndhqtojq2bh.png' },
+      { person: 'Галина Касьянова', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76l0hna1tdi1arn1klg12i11f1t293.png' },
+      { person: 'Ірина Кіянчук', location: 'Кривий Ріг, Дніпропетровська область', coords: [47.9102734, 33.3917703], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76kmu4mc6inflbs818jb21246.png' },
+      { person: 'Наталія Васковська', location: 'Кривий Ріг, Дніпропетровська область', coords: [47.9102734, 33.3917703], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76khusrju51ku11epk1bnvfii222.png' },
+      { person: 'Галина Подоляк', location: 'Мала Токмачка, Запорізька область', coords: [47.5326880, 35.8968010], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76kc6oqv9anul42keqhfe61v4.png' },
+      { person: 'Анна Шиманська', location: 'Ірпінь, Київська область', coords: [50.5206777, 30.2448725], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76k6sv1181aven1ds811qku6r1sr.png' },
+      { person: 'Сергій Гуторов', location: 'Авдіївка, Донецька область', coords: [48.1338824, 37.7466719], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76jqrd543a15pl6cu1oq5meq1op.png' },
+      { person: 'Максим Крутінь', location: 'Придніпровське, Дніпропетровська область', coords: [47.6189190, 34.4545940], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76jd4eq30tu63176b1m973ep1jc.png' },
+      { person: 'Микола Приз', location: 'Новий Биків, Чернігівська область', coords: [50.5958210, 31.6701510], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j76j8h4dtqh6m01c2v1ttji0a1hj.png' },
+      { person: 'Кирило Колосов', location: 'Святомиколаївка, Миколаївська область', coords: [47.0235389, 32.1094293], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j749p4k73981rs21gsrl64tfr2v1.png' },
+      { person: 'Надія Шевченко', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j749h3uupl7mua1gn2e0u1sq92s8.png' },
+      { person: 'Наталія Карачевцева', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7499r0qtd7m8i36l193hcfq2pf.png' },
+      { person: 'Валерій Суржко', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7493qvjqrqq3pipkis18vm2nh.png' },
+      { person: 'Сергій Парфьонов', location: 'Лиман, Донецька область', coords: [48.9801314, 37.8168012], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j748m4p21o22k36fvu1b2eo4s2j4.png' },
+      { person: 'Катерина Гамулько', location: 'Бахмут, Донецька область', coords: [48.5894123, 38.0020994], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j748hbasl7qud31lgga9d1c0g2gr.png' },
+      { person: 'Олександр Бреус', location: 'Нова Басань, Чернігівська область', coords: [50.5728110, 31.5184000], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j748b274o6o5d29go1mhbqd32ed.png' },
+      { person: 'Олександр Степанечко', location: 'Мила, Київська область', coords: [50.4413760, 30.1723020], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j74836oo1e93u4up6nqq5lc02bk.png' },
+      { person: 'Володимир Сова', location: 'Гуляйполе, Запорізька область', coords: [47.6655382, 36.2656849], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j747tl5s1n8316v5kqp1b9a1qov29r.png' },
+      { person: 'Олександр Кущ', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j747o14uor8jpj1mhebgpihk27n.png' },
+      { person: 'Віталій Новіков', location: 'Кулажинці, Київська область', coords: [50.5546697, 31.2107001], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j747i3p4nbccgb982era2qg25e.png' },
+      { person: 'Халід Харченко', location: 'Пологи, Запорізька область', coords: [47.4784803, 36.2531412], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j747avb4v307tv1c1u1mbr17ll22r.png' },
+      { person: 'Андрій Коваль', location: 'Бородянка, Київська область', coords: [50.6473800, 29.9173936], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j746tadg1t221vad1j0u1oqhons1ue.png' },
+      { person: 'Надія Мінакова', location: 'Пологи, Запорізька область', coords: [47.4784803, 36.2531412], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j74748svbj9smt8441mbnn4t20s.png' },
+      { person: 'Станіслав Каменських', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7433ang4laao41vgvdm11fk61sa.png' },
+      { person: 'Таїсія Леонова', location: 'Авдіївка, Донецька область', coords: [48.1338824, 37.7466719], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j742up1fsrp10s51fhmcaj17eh1qb.png' },
+      { person: 'Лариса Стринадко', location: 'Харків', coords: [49.9923181, 36.2310146], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j742ntbjgcp1a0ms7o10k11bfv1o2.png' },
+      { person: 'Анатолій Зеркаль', location: 'Зелене Поле, Донецька область', coords: [48.3294662, 37.5773580], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j742g2uu1tsd1r7t1fom4j3139h1lp.png' },
+      { person: 'Ірина Мілованова', location: 'Львів', coords: [49.8419520, 24.0315921], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j742blcarhruqt13gdjht1la41jq.png' },
+      { person: 'Ольга Татарінова', location: 'Львів', coords: [49.8419520, 24.0315921], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7424ph5acc167t7bqk5a18rm1gn.png' },
+      { person: 'Світлана Піх', location: 'Львів', coords: [49.8419520, 24.0315921], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j741vs415io1a7qkg1kovn3e1eu.png' },
+      { person: 'Ольга Дудка', location: 'Львів', coords: [49.8419520, 24.0315921], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j741psnvjpg4jh173a1s34151m1ca.png' },
+      { person: 'Інна Янішевська', location: 'Львів', coords: [49.8419520, 24.0315921], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j741kfcn1dtk1dk312gk1bdut021ah.png' },
+      { person: 'Микола Криницький', location: 'Луч (Промінь), Миколаївська область', coords: [46.8279549, 32.2220079], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j741df811ip11kng1c5k121f48417o.png' },
+      { person: 'Тетяна Верьовкіна', location: 'Суми', coords: [50.9119775, 34.8027723], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j740r10cbaq1hrc1kmc2b76epvj.png' },
+      { person: 'Максим Бобровський', location: 'Бородянка, Київська область', coords: [50.6473800, 29.9173936], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j740livg61u181rc8p1v8eivgtf.png' },
+      { person: 'Галина Бобровська', location: 'Бородянка, Київська область', coords: [50.6473800, 29.9173936], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j740ehdavhk1bvdh5e1v2p1osgr6.png' },
+      { person: 'Світлана Паращевина', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j7407upqk486661g9r5pok1roi.png' },
+      { person: 'Валерія Курильченко', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j73vqrdn15fvefhq71mq311c6jl.png' },
+      { person: 'Вікторія Фількевич', location: 'Маріуполь', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j74025lm1vp67peg17pt6158ome.png' },
+      { person: 'Ганна Задорожна', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j73vl2p8lq71pu01bj7iqog4hh.png' },
+      { person: 'Лариса Древаль', location: 'Гола Пристань, Херсонська область', coords: [46.5320381, 32.5345028], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j73vfa2f8ol441i3p1jam1fddf8.png' },
+      { person: 'Христина Антипенко', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j73vajri18qjf8h2061cga1r6df.png' },
+      { person: 'Іван Антипенко', location: 'Маріуполь, Донецька область', coords: [47.0957648, 37.5499621], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j73v5eua1pf4b871tmb1n2v111kbm.png' },
+      { person: 'Артур Орловський', location: 'Краматорськ, Донецька область', coords: [48.7389415, 37.5843812], photo: 'https://uamemorial.blob.core.windows.net/content/img/custom/o_1j73v0lom12e4k501gvm9soacr9t.png' },
+    ];
+
+    cities.forEach(city => {
+      L.marker(city.coords).addTo(map).bindPopup(city.name);
+    });
+
+    const duplicateTracker = {};
+    const offsetUnit = 0.0003; // ~30-35m offset to avoid perfect overlap while staying near the target
+
+    rawLocations.forEach(place => {
+      const key = `${place.coords[0].toFixed(6)},${place.coords[1].toFixed(6)}`;
+      const offsetIndex = duplicateTracker[key] || 0;
+      duplicateTracker[key] = offsetIndex + 1;
+
+      let lat = place.coords[0];
+      let lng = place.coords[1];
+
+      if (offsetIndex > 0) {
+        const angle = offsetIndex * (Math.PI / 3);
+        const radius = offsetUnit * offsetIndex;
+        const cosLat = Math.cos((lat * Math.PI) / 180);
+        const latOffset = radius * Math.cos(angle);
+        const lngOffset = cosLat === 0 ? 0 : (radius * Math.sin(angle)) / cosLat;
+        lat += latOffset;
+        lng += lngOffset;
+      }
+
+      const popupHtml = `
+        <div style="max-width:160px">
+          <img src="${place.photo}" alt="${place.person}" style="width:100%;height:auto;border-radius:4px;margin-bottom:6px;">
+          <strong>${place.person}</strong><br>${place.location}
+        </div>
+      `;
+
+      L.circleMarker([lat, lng], {
+        radius: 7,
+        color: '#d90429',
+        weight: 2,
+        fillColor: '#ef233c',
+        fillOpacity: 0.85
+      }).addTo(map).bindPopup(popupHtml);
+    });
+  </script>
+</body>
+</html>
